@@ -1,3 +1,5 @@
+import ru.gr0946x.net.Client;
+
 void main() {
-  $END$
+    var c = new Client("localhost", 9460);
 }

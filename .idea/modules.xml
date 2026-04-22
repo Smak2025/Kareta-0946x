@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Communicator/Communicator.iml" filepath="$PROJECT_DIR$/Communicator/Communicator.iml" />
       <module fileurl="file://$PROJECT_DIR$/Kareta-0946x.iml" filepath="$PROJECT_DIR$/Kareta-0946x.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
     </modules>
   </component>
 </project>

@@ -1,3 +1,5 @@
+import ru.gr0946x.net.Server;
+
 void main() {
-  $END$
+    var s = new Server(9460);
 }
