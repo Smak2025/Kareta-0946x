@@ -8,22 +8,27 @@ import java.net.ServerSocket;
 
 public class Server {
 
+    private boolean isActive;
     public Server(int port){
-        try {
+        isActive = true;
+        new Thread(()->{
             try (var serverSocket = new ServerSocket(port)) {
                 System.out.println("Сервер запущен");
-                try (var socket = serverSocket.accept()) {
-                    System.out.println("Подключение принято");
-                    var br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    var string = br.readLine();
-                    System.out.println("Клиент прислал: " + string);
-                    var pw = new PrintWriter(socket.getOutputStream());
-                    pw.println("Сервер принял ваше сообщение: " + string);
-                    pw.flush();
+                while (isActive) {
+                    try{
+                        var socket = serverSocket.accept();
+                        System.out.println("Клиент подключен");
+                        var connClient = new ConnectedClient(socket);
+                        connClient.start();
+                    } catch (Exception e) {
+                        System.out.println("Ошибка подключения клиентов...");
+                        System.out.println(e.getMessage());
+                        isActive = false;
+                    }
                 }
+            } catch (IOException e) {
+                System.out.println("Ошибка включения сервера");
             }
-        } catch (IOException e) {
-            System.out.println("Ошибка включения сервера");
-        }
+        }).start();
     }
 }

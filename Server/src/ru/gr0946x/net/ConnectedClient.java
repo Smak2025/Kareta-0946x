@@ -1,29 +1,24 @@
 package ru.gr0946x.net;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class ConnectedClient {
     private Communicator communicator;
-    public Client(String host, int port) throws IOException {
-        var socket = new Socket(host, port);
+
+    public ConnectedClient(Socket socket){
         communicator = new Communicator(socket);
         communicator.addDataListener(this::parseData);
     }
-
     public void start(){
         communicator.start();
     }
 
-    private void parseData(String data){
-        System.out.println("От сервера пришло: " + data);
-    }
-
     public void sendData(String data){
         communicator.sendData(data);
+    }
+
+    private void parseData(String data){
+        System.out.println("Клиент прислал: " + data);
     }
 
     public void stop(){
