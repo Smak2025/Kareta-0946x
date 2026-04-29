@@ -39,7 +39,7 @@ public class Communicator {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Ошибка чтения данных");
+                System.out.println("Ошибка чтения данных из сети");
                 stop();
             }
         }).start();
