@@ -1,5 +1,6 @@
 package ru.gr0946x.net;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +10,18 @@ public class ConnectedClient {
     private final static List<ConnectedClient> clients = new ArrayList<>();
     private String name = null;
 
-    public ConnectedClient(Socket socket){
+    public ConnectedClient(Socket socket) throws IOException {
         communicator = new Communicator(socket);
         communicator.addDataListener(this::parseData);
-        clients.add(this);
+        synchronized (clients) {
+            clients.add(this);
+        }
     }
     public void start(){
         communicator.start();
-        sendData(MessageType.REQUEST + ":" + "Введите имя:");
+        sendData(MessageType.REQUEST
+                + ProtocolConstants.COMMAND_SEPARATOR
+                + "Введите имя:");
     }
 
     public void sendData(String data){
@@ -26,13 +31,21 @@ public class ConnectedClient {
     private void parseData(String data){
         if (name == null){
             if (data.isBlank()){
-                sendData(MessageType.ERROR + ":" + "Такое имя не подходит");
-                sendData(MessageType.REQUEST + ":" + "Введите имя");
+                sendData(MessageType.ERROR
+                        + ProtocolConstants.COMMAND_SEPARATOR
+                        + "Такое имя не подходит");
+                sendData(MessageType.REQUEST
+                        + ProtocolConstants.COMMAND_SEPARATOR
+                        + "Введите имя");
                 return;
             }
             if (isInUse(data)){
-                sendData(MessageType.ERROR + ":" + "Такое имя уже занято");
-                sendData(MessageType.REQUEST + ":" + "Введите имя");
+                sendData(MessageType.ERROR
+                        + ProtocolConstants.COMMAND_SEPARATOR
+                        + "Такое имя уже занято");
+                sendData(MessageType.REQUEST
+                        + ProtocolConstants.COMMAND_SEPARATOR
+                        + "Введите имя");
                 return;
             }
             name = data;
@@ -44,14 +57,22 @@ public class ConnectedClient {
     }
 
     private void sendForAll(String data){
-        for (var client: clients) {
-            client.sendData(MessageType.MESSAGE + ":" + name + ":" + data);
-        }
+        // TODO: ИСПРАВЛЕНИЕ
+            for (var client : clients) {
+                client.sendData(MessageType.MESSAGE
+                        + ProtocolConstants.COMMAND_SEPARATOR
+                        + name
+                        + ProtocolConstants.AUTHOR_SEPARATOR
+                        + data);
+            }
+
     }
     private boolean isInUse(String name){
-        for (var client: clients) {
-            if (client.name.equals(name)){
-                return true;
+        synchronized (clients) {
+            for (var client : clients) {
+                if (client.name.equals(name)) {
+                    return true;
+                }
             }
         }
         return false;

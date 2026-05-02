@@ -1,7 +1,9 @@
 package ru.gr0946x.ui;
 
 import ru.gr0946x.net.MessageType;
+import ru.gr0946x.net.ProtocolConstants;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,10 +11,10 @@ import java.util.function.Consumer;
 
 public class ConsoleUi implements Ui{
 
-    private List<Consumer<String>> listeners = new ArrayList<>();
+    private final List<Consumer<String>> listeners = new ArrayList<>();
 
     public void start(){
-        var scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in, StandardCharsets.UTF_8);
         new Thread(()-> {
             while (true) {
                 var userData = scanner.nextLine();
@@ -27,7 +29,10 @@ public class ConsoleUi implements Ui{
     public void showInfo(String data, MessageType type) {
         switch (type){
             case MESSAGE -> {
-                var message = data.split(":", 2);
+                var message = data.split(
+                        ProtocolConstants.AUTHOR_SEPARATOR,
+                        2
+                );
                 System.out.println(message[0]+" написал: ");
                 System.out.println(message[1]);
             }

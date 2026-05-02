@@ -33,7 +33,7 @@ public class Client {
     }
 
     private void parseData(String data){
-        var fullInfo = data.split(":", 2);
+        var fullInfo = data.split(ProtocolConstants.COMMAND_SEPARATOR, 2);
         if (fullInfo.length == 2) {
             var type = MessageType.valueOf(fullInfo[0]);
 
