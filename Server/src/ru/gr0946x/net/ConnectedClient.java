@@ -49,33 +49,33 @@ public class ConnectedClient {
                 return;
             }
             name = data;
-            sendForAll("Пользователь "+ name + " вошел в чат");
+            sendForAll(MessageType.INFO, "Пользователь "+ name + " вошел в чат");
         } else {
-            sendForAll(data);
+            sendForAll(MessageType.MESSAGE, data);
         }
 
     }
 
-    private void sendForAll(String data){
-        // TODO: ИСПРАВЛЕНИЕ
-            for (var client : clients) {
-                client.sendData(MessageType.MESSAGE
-                        + ProtocolConstants.COMMAND_SEPARATOR
-                        + name
-                        + ProtocolConstants.AUTHOR_SEPARATOR
-                        + data);
-            }
-
+    private void sendForAll(MessageType type, String data){
+        var author = (type == MessageType.MESSAGE) ?
+                name + ProtocolConstants.AUTHOR_SEPARATOR :
+                "";
+        synchronized (clients) {
+            clients.stream()
+                    .filter(c -> c.name != null)
+                    .forEach(client -> {
+                        client.sendData(type
+                                + ProtocolConstants.COMMAND_SEPARATOR
+                                + author
+                                + data);
+                    });
+        }
     }
     private boolean isInUse(String name){
         synchronized (clients) {
-            for (var client : clients) {
-                if (client.name.equals(name)) {
-                    return true;
-                }
-            }
+            return clients.stream()
+                    .anyMatch(c -> c.name != null && c.name.equalsIgnoreCase(name));
         }
-        return false;
     }
 
     public void stop(){

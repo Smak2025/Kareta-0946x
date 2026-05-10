@@ -8,5 +8,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Communicator" />
+    <orderEntry type="library" name="springframework.data.spring.jpa" level="project" />
+    <orderEntry type="library" name="hibernate.orm.core" level="project" />
+    <orderEntry type="library" name="h2database.h2" level="project" />
+    <orderEntry type="library" name="slf4j.api" level="project" />
+    <orderEntry type="library" name="jakarta.persistence.api" level="project" />
   </component>
 </module>
