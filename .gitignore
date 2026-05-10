@@ -28,3 +28,8 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/.idea/libraries/h2database_h2.xml
+/.idea/libraries/hibernate_orm_core.xml
+/.idea/libraries/jakarta_persistence_api.xml
+/.idea/libraries/slf4j_api.xml
+/.idea/libraries/springframework_data_spring_jpa.xml
